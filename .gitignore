@@ -1,0 +1,32 @@
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+
+# Data and uploads (local dev)
+backend/data/
+backend/uploads/
+e2e-data/
+e2e/fixtures/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
