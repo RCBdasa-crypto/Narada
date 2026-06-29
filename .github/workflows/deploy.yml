@@ -14,6 +14,10 @@ on:
         required: false
         default: 'root'
 
+env:
+  DEPLOY_HOST: ${{ github.event.inputs.ssh_host || secrets.SSH_HOST || '109.196.102.114' }}
+  DEPLOY_USER: ${{ github.event.inputs.ssh_user || secrets.SSH_USER || 'root' }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -25,8 +29,8 @@ jobs:
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SSH_HOST || github.event.inputs.ssh_host }}
-          username: ${{ secrets.SSH_USER || github.event.inputs.ssh_user }}
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
