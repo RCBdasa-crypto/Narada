@@ -30,3 +30,6 @@ playwright/.cache/
 *.db
 *.db-shm
 *.db-wal
+
+# Installer build output
+release/

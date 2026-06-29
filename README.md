@@ -31,6 +31,32 @@ npm run dev
 Frontend: http://localhost:5173  
 Backend API: http://localhost:3001/api/todos
 
+## Установка на компьютер (установочный файл)
+
+### Вариант 1 — архив (Windows / Linux)
+
+Соберите архив:
+
+```bash
+npm run package:installer
+```
+
+Файл появится в `release/Narada-Todo-1.0.0.zip`.
+
+**Windows:** распакуйте архив → запустите `installer\windows\install.bat` → на рабочем столе появится ярлык «Narada To-Do».
+
+**Linux:** распакуйте → `chmod +x installer/linux/install.sh && ./installer/linux/install.sh` → запуск командой `narada-todo`.
+
+После установки приложение открывается в браузере: **http://localhost:3001**
+
+> Нужен [Node.js 18+](https://nodejs.org/).
+
+### Вариант 2 — setup.exe (только Windows)
+
+1. Установите [Inno Setup](https://jrsoftware.org/isinfo.php)
+2. Откройте `installer/windows/Narada-Setup.iss`
+3. Нажмите **Compile** — получите `release/Narada-Todo-Setup-1.0.0.exe`
+
 ## Тесты
 
 ```bash
