@@ -1,0 +1,17 @@
+# Traefik dynamic config for Narada To-Do (fallback if labels are not used)
+# Place in /opt/traefik/dynamic/narada-todo.yml on the server
+
+http:
+  routers:
+    narada-todo:
+      rule: "Host(`todo-app.shastrasevaka.ru`)"
+      entryPoints:
+        - websecure
+      service: narada-todo
+      tls: {}
+
+  services:
+    narada-todo:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:3010"

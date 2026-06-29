@@ -1,0 +1,26 @@
+services:
+  todo-app:
+    build: .
+    container_name: narada-todo-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3010:3001"
+    volumes:
+      - todo-data:/app/data
+      - todo-uploads:/app/uploads
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATA_DIR: /app/data
+      UPLOADS_DIR: /app/uploads
+      FRONTEND_DIST: /app/frontend/dist
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.narada-todo.rule=Host(`todo-app.shastrasevaka.ru`)"
+      - "traefik.http.routers.narada-todo.entrypoints=websecure"
+      - "traefik.http.routers.narada-todo.tls=true"
+      - "traefik.http.services.narada-todo.loadbalancer.server.port=3001"
+
+volumes:
+  todo-data:
+  todo-uploads:

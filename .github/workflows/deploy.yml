@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            export APP_DIR=/opt/narada-todo
+            export REPO_URL=https://github.com/RCBdasa-crypto/Narada.git
+            export BRANCH=main
+            if [ -d "$APP_DIR/.git" ]; then
+              cd "$APP_DIR"
+              git fetch origin main
+              git reset --hard origin/main
+            else
+              git clone --branch main "$REPO_URL" "$APP_DIR"
+              cd "$APP_DIR"
+            fi
+            docker compose build
+            docker compose up -d
+            docker compose ps
