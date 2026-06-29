@@ -4,6 +4,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      ssh_host:
+        description: 'SSH host (IP or domain)'
+        required: false
+        default: '109.196.102.114'
+      ssh_user:
+        description: 'SSH username'
+        required: false
+        default: 'root'
 
 jobs:
   deploy:
@@ -16,14 +25,18 @@ jobs:
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          host: ${{ secrets.SSH_HOST || github.event.inputs.ssh_host }}
+          username: ${{ secrets.SSH_USER || github.event.inputs.ssh_user }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
+            set -euo pipefail
             export APP_DIR=/opt/narada-todo
             export REPO_URL=https://github.com/RCBdasa-crypto/Narada.git
             export BRANCH=main
+
+            mkdir -p "$(dirname "$APP_DIR")"
+
             if [ -d "$APP_DIR/.git" ]; then
               cd "$APP_DIR"
               git fetch origin main
@@ -32,6 +45,9 @@ jobs:
               git clone --branch main "$REPO_URL" "$APP_DIR"
               cd "$APP_DIR"
             fi
+
             docker compose build
             docker compose up -d
             docker compose ps
+
+            echo "Narada To-Do deployed at https://todo-app.shastrasevaka.ru"
