@@ -83,4 +83,36 @@ describe('todos API', () => {
     const afterDelete = await request(app).get(`/api/todos/${id}`).expect(200);
     expect(afterDelete.body.attachments).toHaveLength(0);
   });
+
+  it('stores and serves attachments with UTF-8 filenames', async () => {
+    const createRes = await request(app)
+      .post('/api/todos')
+      .send({ title: 'Files', note: '' })
+      .expect(201);
+
+    const id = createRes.body.id;
+    const originalName = 'Документ.pdf';
+
+    await request(app)
+      .post(`/api/todos/${id}/attachments`)
+      .field('originalName', originalName)
+      .attach('file', Buffer.from('%PDF-1.4'), {
+        filename: Buffer.from(originalName, 'utf8').toString('latin1'),
+        contentType: 'application/pdf',
+      })
+      .expect(201);
+
+    const todoRes = await request(app).get(`/api/todos/${id}`).expect(200);
+    expect(todoRes.body.attachments[0].original_name).toBe(originalName);
+
+    const attachmentId = todoRes.body.attachments[0].id;
+
+    const fileRes = await request(app)
+      .get(`/api/todos/${id}/attachments/${attachmentId}`)
+      .expect(200);
+
+    expect(fileRes.headers['content-type']).toContain('application/pdf');
+    expect(fileRes.headers['content-disposition']).toContain(encodeURIComponent(originalName));
+    expect(Buffer.isBuffer(fileRes.body) ? fileRes.body.toString() : fileRes.text).toBe('%PDF-1.4');
+  });
 });

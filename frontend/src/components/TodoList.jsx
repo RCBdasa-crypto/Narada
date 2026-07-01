@@ -1,5 +1,6 @@
+import AttachmentLink, { AttachmentFileLabel, isImageForPreview } from './AttachmentLink';
 import { getUploadUrl } from '../api';
-import { isImageAttachment, truncateText } from '../utils/helpers';
+import { truncateText } from '../utils/helpers';
 import './TodoList.css';
 
 export default function TodoList({ todos, selectedId, onSelect, onDelete }) {
@@ -25,18 +26,32 @@ export default function TodoList({ todos, selectedId, onSelect, onDelete }) {
               {todo.attachments?.length > 0 && (
                 <div className="attachment-previews">
                   {todo.attachments.map((attachment) =>
-                    isImageAttachment(attachment) ? (
-                      <img
+                    isImageForPreview(attachment) ? (
+                      <AttachmentLink
                         key={attachment.id}
-                        src={getUploadUrl(attachment.filename)}
-                        alt={attachment.original_name}
-                        className="attachment-thumb"
-                        data-testid="image-preview"
-                      />
+                        todoId={todo.id}
+                        attachment={attachment}
+                        className="attachment-thumb-link"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
+                          src={getUploadUrl(attachment.filename)}
+                          alt={attachment.original_name}
+                          className="attachment-thumb"
+                          data-testid="image-preview"
+                        />
+                      </AttachmentLink>
                     ) : (
-                      <span key={attachment.id} className="file-badge" data-testid="file-badge">
-                        📎 {attachment.original_name}
-                      </span>
+                      <AttachmentLink
+                        key={attachment.id}
+                        todoId={todo.id}
+                        attachment={attachment}
+                        className="file-badge"
+                        onClick={(e) => e.stopPropagation()}
+                        data-testid="file-badge"
+                      >
+                        <AttachmentFileLabel attachment={attachment} />
+                      </AttachmentLink>
                     )
                   )}
                 </div>

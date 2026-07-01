@@ -14,6 +14,11 @@ import {
   deleteAttachment,
   uploadsDir,
 } from '../db.js';
+import {
+  resolveOriginalName,
+  fixMojibakeFilename,
+  contentDispositionInline,
+} from '../filename.js';
 
 const router = Router();
 
@@ -30,8 +35,19 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
+function withFixedAttachmentNames(todo) {
+  if (!todo?.attachments?.length) return todo;
+  return {
+    ...todo,
+    attachments: todo.attachments.map((attachment) => ({
+      ...attachment,
+      original_name: fixMojibakeFilename(attachment.original_name),
+    })),
+  };
+}
+
 router.get('/', (_req, res) => {
-  res.json(getAllTodos());
+  res.json(getAllTodos().map(withFixedAttachmentNames));
 });
 
 router.get('/:id', (req, res) => {
@@ -39,7 +55,7 @@ router.get('/:id', (req, res) => {
   if (!todo) {
     return res.status(404).json({ error: 'Todo not found' });
   }
-  res.json(todo);
+  res.json(withFixedAttachmentNames(todo));
 });
 
 router.post('/', (req, res) => {
@@ -114,13 +130,31 @@ router.post('/:id/attachments', upload.single('file'), (req, res) => {
     id: uuidv4(),
     todoId: req.params.id,
     filename: req.file.filename,
-    originalName: req.file.originalname,
+    originalName: resolveOriginalName(req.body?.originalName, req.file.originalname),
     mimeType: req.file.mimetype,
     size: req.file.size,
     createdAt: new Date().toISOString(),
   });
 
-  res.status(201).json(getTodoById(req.params.id));
+  res.status(201).json(withFixedAttachmentNames(getTodoById(req.params.id)));
+});
+
+router.get('/:todoId/attachments/:attachmentId', (req, res) => {
+  const attachment = getAttachmentById(req.params.attachmentId);
+  if (!attachment || attachment.todo_id !== req.params.todoId) {
+    return res.status(404).json({ error: 'Attachment not found' });
+  }
+
+  const filePath = path.join(uploadsDir, attachment.filename);
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'File not found' });
+  }
+
+  const originalName = fixMojibakeFilename(attachment.original_name);
+
+  res.setHeader('Content-Type', attachment.mime_type || 'application/octet-stream');
+  res.setHeader('Content-Disposition', contentDispositionInline(originalName));
+  res.sendFile(filePath);
 });
 
 router.delete('/:todoId/attachments/:attachmentId', (req, res) => {

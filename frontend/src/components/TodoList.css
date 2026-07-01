@@ -61,6 +61,12 @@
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #d1d5db;
+  display: block;
+}
+
+.attachment-thumb-link {
+  display: inline-block;
+  border-radius: 8px;
 }
 
 .file-badge {
@@ -71,4 +77,8 @@
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 0.8rem;
+}
+
+.file-badge:hover {
+  background: #d1d5db;
 }

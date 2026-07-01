@@ -46,6 +46,7 @@ export async function deleteTodo(id) {
 export async function uploadAttachment(todoId, file) {
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('originalName', file.name);
 
   const response = await fetch(`${API_BASE}/todos/${todoId}/attachments`, {
     method: 'POST',
@@ -63,4 +64,8 @@ export async function deleteAttachment(todoId, attachmentId) {
 
 export function getUploadUrl(filename) {
   return `/uploads/${filename}`;
+}
+
+export function getAttachmentUrl(todoId, attachmentId) {
+  return `${API_BASE}/todos/${todoId}/attachments/${attachmentId}`;
 }

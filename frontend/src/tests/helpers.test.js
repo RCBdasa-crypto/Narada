@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isImageAttachment, formatFileSize, truncateText } from '../utils/helpers';
+import { isImageAttachment, formatFileSize, truncateText, displayFileName } from '../utils/helpers';
 
 describe('helpers', () => {
   it('detects image attachments', () => {
@@ -17,5 +17,13 @@ describe('helpers', () => {
     const long = 'a'.repeat(150);
     expect(truncateText(long, 120)).toHaveLength(121);
     expect(truncateText('short')).toBe('short');
+  });
+
+  it('fixes mojibake filenames for display', () => {
+    const mojibake = new TextDecoder('latin1').decode(
+      new TextEncoder().encode('Фото.jpg')
+    );
+    expect(displayFileName(mojibake)).toBe('Фото.jpg');
+    expect(displayFileName('notes.txt')).toBe('notes.txt');
   });
 });

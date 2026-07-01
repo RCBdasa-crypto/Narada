@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import AttachmentLink, { AttachmentFileLabel, isImageForPreview } from './AttachmentLink';
 import { getUploadUrl } from '../api';
-import { formatFileSize, isImageAttachment } from '../utils/helpers';
+import { formatFileSize } from '../utils/helpers';
 import './TodoForm.css';
 
 export default function TodoForm({ todo, onSave, onRemoveAttachment }) {
@@ -71,15 +72,21 @@ export default function TodoForm({ todo, onSave, onRemoveAttachment }) {
           <ul>
             {todo.attachments.map((attachment) => (
               <li key={attachment.id}>
-                {isImageAttachment(attachment) ? (
-                  <img
-                    src={getUploadUrl(attachment.filename)}
-                    alt={attachment.original_name}
-                    className="form-preview"
-                  />
-                ) : (
-                  <span>📎 {attachment.original_name}</span>
-                )}
+                <AttachmentLink
+                  todoId={todo.id}
+                  attachment={attachment}
+                  className="form-attachment-link"
+                >
+                  {isImageForPreview(attachment) ? (
+                    <img
+                      src={getUploadUrl(attachment.filename)}
+                      alt={attachment.original_name}
+                      className="form-preview"
+                    />
+                  ) : (
+                    <AttachmentFileLabel attachment={attachment} />
+                  )}
+                </AttachmentLink>
                 <span className="file-size">{formatFileSize(attachment.size)}</span>
                 <button
                   type="button"
