@@ -69,8 +69,8 @@ echo.
 echo Запуск: ярлык «Narada To-Do» на рабочем столе
 echo        или installer\windows\start-narada.bat
 echo.
-echo ВАЖНО: не закрывайте чёрное окно — это сервер!
-echo Браузер: http://localhost:3001
+echo Данные сохраняются в: %APPDATA%\Narada-Todo\
+echo Диагностика: installer\windows\diagnose.bat
 echo.
 pause
 exit /b 0

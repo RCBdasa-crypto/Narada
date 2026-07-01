@@ -48,6 +48,7 @@ Source: "..\..\frontend\dist\*"; DestDir: "{app}\frontend\dist"; Flags: recurses
 Source: "..\..\installer\windows\install.bat"; DestDir: "{app}\installer\windows"
 Source: "..\..\installer\windows\start-narada.bat"; DestDir: "{app}\installer\windows"
 Source: "..\..\installer\windows\uninstall.bat"; DestDir: "{app}\installer\windows"
+Source: "..\..\installer\windows\diagnose.bat"; DestDir: "{app}\installer\windows"
 Source: "..\..\README.md"; DestDir: "{app}"; Flags: skipifsourcedoesntexist
 
 [Icons]
