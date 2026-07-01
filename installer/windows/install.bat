@@ -47,6 +47,9 @@ echo [1/2] Установка серверных зависимостей (~30-6
 call npm install --omit=dev --prefix backend
 if errorlevel 1 goto :error
 
+echo Пересборка нативных модулей...
+call npm rebuild --prefix backend 2>nul
+
 echo.
 echo [2/2] Создание ярлыка...
 set "START_SCRIPT=%APP_DIR%installer\windows\start-narada.bat"
