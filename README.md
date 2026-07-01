@@ -33,29 +33,30 @@ Backend API: http://localhost:3001/api/todos
 
 ## Установка на компьютер (установочный файл)
 
-### Вариант 1 — архив (Windows / Linux)
+### Почему установщик мог быть огромным (4+ ГБ)?
 
-Соберите архив:
+Если **setup.exe** или zip весит гигабайты — в него случайно попали папки **`node_modules`** (сотни МБ–ГБ) и dev-инструменты (Playwright, тесты). Само приложение — **~1–3 МБ** в архиве, после установки **~60–80 МБ**.
 
-```bash
-npm run package:installer
-```
+**Используйте lite-версию** с GitHub Releases (без node_modules).
 
-Файл появится в `release/Narada-Todo-1.0.0.zip`.
+### Вариант 1 — лёгкий архив (~200 КБ)
 
-**Windows:** распакуйте архив → запустите `installer\windows\install.bat` → на рабочем столе появится ярлык «Narada To-Do».
+**Скачать:** https://github.com/RCBdasa-crypto/Narada/releases/download/v1.0.0/Narada-Todo-1.0.0-lite.zip
 
-**Linux:** распакуйте → `chmod +x installer/linux/install.sh && ./installer/linux/install.sh` → запуск командой `narada-todo`.
+**Windows:** распакуйте → `installer\windows\install.bat` → ярлык на рабочем столе.
 
-После установки приложение открывается в браузере: **http://localhost:3001**
+**Linux:** `./installer/linux/install.sh` → команда `narada-todo`.
 
-> Нужен [Node.js 18+](https://nodejs.org/).
+При установке скачается ~60 МБ серверных зависимостей (нужен Node.js 18+).
 
-### Вариант 2 — setup.exe (только Windows)
+### Вариант 2 — setup.exe (~1–3 МБ)
 
-1. Установите [Inno Setup](https://jrsoftware.org/isinfo.php)
-2. Откройте `installer/windows/Narada-Setup.iss`
-3. Нажмите **Compile** — получите `release/Narada-Todo-Setup-1.0.0.exe`
+1. Скачайте lite-архив и распакуйте (или клонируйте репозиторий)
+2. Выполните `npm run build --prefix frontend` (если нет `frontend/dist`)
+3. Откройте `installer/windows/Narada-Setup.iss` в [Inno Setup](https://jrsoftware.org/isinfo.php)
+4. **Compile** → `release/Narada-Todo-Setup-1.0.0.exe` (~1–3 МБ, не гигабайты!)
+
+> **Важно:** не компилируйте setup.exe из папки, где уже есть `node_modules` — используйте обновлённый `.iss` с явным списком файлов.
 
 ## Тесты
 

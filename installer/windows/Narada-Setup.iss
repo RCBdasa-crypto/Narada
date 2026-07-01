@@ -1,6 +1,6 @@
-; Скрипт Inno Setup для сборки setup.exe на Windows
+; Минимальный установщик Narada To-Do (~1-3 МБ setup.exe)
+; НЕ включает node_modules — зависимости ставятся при установке через install.bat
 ; Скачайте Inno Setup: https://jrsoftware.org/isinfo.php
-; Откройте этот файл в Inno Setup Compiler и нажмите Compile
 
 #define MyAppName "Narada To-Do"
 #define MyAppVersion "1.0.0"
@@ -18,7 +18,7 @@ DefaultDirName={autopf}\Narada-Todo
 DefaultGroupName={#MyAppName}
 OutputDir=..\..\release
 OutputBaseFilename=Narada-Todo-Setup-{#MyAppVersion}
-Compression=lzma2
+Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
@@ -29,8 +29,16 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 [Tasks]
 Name: "desktopicon"; Description: "Создать ярлык на рабочем столе"; GroupDescription: "Дополнительно:"
 
+; Явный список файлов — node_modules НЕ попадает в установщик
 [Files]
-Source: "..\..\*"; DestDir: "{app}"; Excludes: "node_modules\*,release\*,.git\*,e2e-data\*,test-results\*,playwright-report\*,frontend\node_modules\*,backend\node_modules\*,*.db"; Flags: recursesubdirs createallsubdirs
+Source: "..\..\backend\src\*"; DestDir: "{app}\backend\src"; Flags: recursesubdirs
+Source: "..\..\backend\package.json"; DestDir: "{app}\backend"
+Source: "..\..\backend\package-lock.json"; DestDir: "{app}\backend"
+Source: "..\..\frontend\dist\*"; DestDir: "{app}\frontend\dist"; Flags: recursesubdirs
+Source: "..\..\installer\windows\install.bat"; DestDir: "{app}\installer\windows"
+Source: "..\..\installer\windows\start-narada.bat"; DestDir: "{app}\installer\windows"
+Source: "..\..\installer\windows\uninstall.bat"; DestDir: "{app}\installer\windows"
+Source: "..\..\README.md"; DestDir: "{app}"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\installer\windows\{#MyAppExeName}"
@@ -38,7 +46,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\installer\windows\{#MyAppEx
 Name: "{group}\Удалить {#MyAppName}"; Filename: "{app}\installer\windows\uninstall.bat"
 
 [Run]
-Filename: "{app}\installer\windows\install.bat"; Description: "Установить зависимости и собрать приложение"; Flags: postinstall shellexec skipifsilent
+Filename: "{app}\installer\windows\install.bat"; Description: "Установить зависимости (~60 МБ)"; Flags: postinstall shellexec skipifsilent
 Filename: "{app}\installer\windows\{#MyAppExeName}"; Description: "Запустить {#MyAppName}"; Flags: postinstall shellexec skipifsilent
 
 [Code]
@@ -48,9 +56,9 @@ begin
   if not RegKeyExists(HKLM, 'SOFTWARE\Node.js') and
      not RegKeyExists(HKCU, 'SOFTWARE\Node.js') then
   begin
-    if MsgBox('Node.js не обнаружен. Для работы приложения нужен Node.js 18+.' + #13#10 +
-              'Продолжить установку? (Node.js можно установить с nodejs.org)',
-              mbConfirmation, MB_YESNO) = IDNO then
-      Result := False;
+    if MsgBox('Node.js не обнаружен. Для работы нужен Node.js 18+.' + #13#10 +
+              'Скачайте с nodejs.org и установите перед запуском приложения.',
+              mbInformation, MB_OK) = IDOK then
+      Result := True;
   end;
 end;

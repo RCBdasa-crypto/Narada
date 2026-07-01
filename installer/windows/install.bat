@@ -10,7 +10,6 @@ echo   Narada To-Do — установка
 echo ========================================
 echo.
 
-:: Определяем корень проекта (папка с package.json)
 set "APP_DIR=%~dp0"
 if exist "%APP_DIR%..\..\package.json" (
   set "APP_DIR=%APP_DIR%..\.."
@@ -22,45 +21,33 @@ cd /d "%APP_DIR%"
 echo Папка приложения: %CD%
 echo.
 
-:: Проверка Node.js
 where node >nul 2>&1
 if errorlevel 1 (
   echo [ОШИБКА] Node.js не найден.
-  echo.
-  echo Установите Node.js 18+ с сайта: https://nodejs.org/
-  echo После установки перезапустите этот файл.
-  echo.
+  echo Установите Node.js 18+ с https://nodejs.org/
   pause
   exit /b 1
 )
 
-for /f "tokens=*" %%v in ('node --version') do set NODE_VER=%%v
-echo Node.js: %NODE_VER%
+echo Node.js: 
+node --version
 echo.
 
-:: Установка зависимостей
-echo [1/3] Установка зависимостей...
-call npm install
+if not exist "frontend\dist\index.html" (
+  echo [ОШИБКА] Не найден собранный интерфейс: frontend\dist\
+  echo Скачайте полный архив с GitHub Releases.
+  pause
+  exit /b 1
+)
+
+echo [1/2] Установка серверных зависимостей (только runtime, ~30-60 МБ)...
+call npm install --omit=dev --prefix backend
 if errorlevel 1 goto :error
 
-call npm install --prefix backend
-if errorlevel 1 goto :error
-
-call npm install --prefix frontend
-if errorlevel 1 goto :error
-
-:: Сборка фронтенда
 echo.
-echo [2/3] Сборка интерфейса...
-call npm run build --prefix frontend
-if errorlevel 1 goto :error
-
-:: Ярлык на рабочем столе
-echo.
-echo [3/3] Создание ярлыка...
+echo [2/2] Создание ярлыка...
 set "START_SCRIPT=%APP_DIR%installer\windows\start-narada.bat"
-set "DESKTOP=%USERPROFILE%\Desktop"
-set "SHORTCUT=%DESKTOP%\Narada To-Do.lnk"
+set "SHORTCUT=%USERPROFILE%\Desktop\Narada To-Do.lnk"
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
   "$ws = New-Object -ComObject WScript.Shell; ^
@@ -76,10 +63,9 @@ echo ========================================
 echo   Установка завершена!
 echo ========================================
 echo.
-echo Запуск: дважды щёлкните «Narada To-Do» на рабочем столе
-echo        или запустите: installer\windows\start-narada.bat
-echo.
-echo Приложение откроется в браузере: http://localhost:3001
+echo Размер приложения: ~60-80 МБ (без лишних dev-файлов)
+echo Запуск: ярлык «Narada To-Do» на рабочем столе
+echo Браузер: http://localhost:3001
 echo.
 pause
 exit /b 0
