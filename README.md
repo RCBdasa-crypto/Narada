@@ -41,7 +41,7 @@ Backend API: http://localhost:3001/api/todos
 
 ### Вариант 1 — лёгкий архив (~200 КБ)
 
-**Скачать:** https://github.com/RCBdasa-crypto/Narada/releases/download/v1.0.0/Narada-Todo-1.0.0-lite.zip
+**Скачать:** https://github.com/RCBdasa-crypto/Narada/releases/download/v1.0.1/Narada-Todo-1.0.1-lite.zip
 
 В архиве есть `installer\windows\Narada-Setup.iss` для Inno Setup.
 

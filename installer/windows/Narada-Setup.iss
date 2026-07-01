@@ -6,7 +6,7 @@
 ; Рядом в корне архива должны быть папки backend\ и frontend\dist\
 
 #define MyAppName "Narada To-Do"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Narada"
 #define MyAppURL "https://github.com/RCBdasa-crypto/Narada"
 #define MyAppExeName "start-narada.bat"
