@@ -1,5 +1,4 @@
 @echo off
-chcp 65001 >nul
 setlocal
 
 set "SCRIPT_DIR=%~dp0"
@@ -17,7 +16,6 @@ cd /d "%APP_DIR%"
 set "USER_DATA=%APPDATA%\Narada-Todo"
 set "DATA_DIR=%USER_DATA%\data"
 set "UPLOADS_DIR=%USER_DATA%\uploads"
-set "LOG_FILE=%USER_DATA%\narada.log"
 
 if not exist "%USER_DATA%" mkdir "%USER_DATA%"
 if not exist "%DATA_DIR%" mkdir "%DATA_DIR%"
@@ -26,26 +24,22 @@ if not exist "%UPLOADS_DIR%" mkdir "%UPLOADS_DIR%"
 where node >nul 2>&1
 if errorlevel 1 (
   echo.
-  echo [ОШИБКА] Node.js не найден!
-  echo Скачайте и установите: https://nodejs.org/
-  echo После установки перезагрузите компьютер.
+  echo [ERROR] Node.js not found!
+  echo Install from https://nodejs.org/ and restart PC.
   pause
   exit /b 1
 )
 
 if not exist "frontend\dist\index.html" (
-  echo [ОШИБКА] Не найден frontend\dist\index.html
+  echo [ERROR] frontend\dist\index.html not found.
   pause
   exit /b 1
 )
 
 if not exist "backend\node_modules\express" (
   echo.
-  echo [ОШИБКА] Зависимости не установлены!
-  echo.
-  echo Щёлкните ПРАВОЙ кнопкой на install.bat
-  echo и выберите «Запуск от имени администратора»:
-  echo   %APP_DIR%\installer\windows\install.bat
+  echo [ERROR] Dependencies not installed!
+  echo Run as Administrator: installer\windows\install.bat
   pause
   exit /b 1
 )
@@ -55,12 +49,12 @@ set FRONTEND_DIST=%CD%\frontend\dist
 
 echo.
 echo ========================================
-echo   Narada To-Do
+echo   Narada To-Do - Server running
 echo ========================================
-echo  Сайт:   http://localhost:3001
-echo  Данные: %USER_DATA%
+echo   URL:  http://localhost:3001
+echo   Data: %USER_DATA%
 echo.
-echo  НЕ ЗАКРЫВАЙТЕ это окно!
+echo   DO NOT CLOSE THIS WINDOW!
 echo ========================================
 echo.
 
@@ -69,21 +63,13 @@ start /min cmd /c "timeout /t 3 /nobreak >nul & start http://localhost:3001"
 node backend\src\server.js
 set ERR=%errorlevel%
 
-if %ERR% neq 0 (
-  echo. >> "%LOG_FILE%"
-  echo ===== Ошибка %date% %time% ===== >> "%LOG_FILE%"
-)
-
 echo.
 echo ========================================
-if %ERR% neq 0 (
-  echo [ОШИБКА] Сервер не запустился!
-  echo.
-  echo Скопируйте ВЕСЬ текст выше и отправьте преподавателю.
-  echo.
-  echo Или запустите: installer\windows\diagnose.bat
+if not %ERR%==0 (
+  echo [ERROR] Server failed! Error code: %ERR%
+  echo Run: installer\windows\diagnose.bat
 ) else (
-  echo Сервер остановлен.
+  echo Server stopped.
 )
 echo ========================================
-pause
+pause

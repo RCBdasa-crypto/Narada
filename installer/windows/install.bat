@@ -1,12 +1,11 @@
 @echo off
-chcp 65001 >nul
 setlocal EnableDelayedExpansion
 
-title Narada To-Do — установка
+title Narada To-Do Install
 
 echo.
 echo ========================================
-echo   Narada To-Do — установка
+echo   Narada To-Do - Install
 echo ========================================
 echo.
 
@@ -21,13 +20,13 @@ if exist "%SCRIPT_DIR%..\..\backend\package.json" (
 )
 
 cd /d "%APP_DIR%"
-echo Папка приложения: %CD%
+echo App folder: %CD%
 echo.
 
 where node >nul 2>&1
 if errorlevel 1 (
-  echo [ОШИБКА] Node.js не найден.
-  echo Установите Node.js 18+ с https://nodejs.org/
+  echo [ERROR] Node.js not found.
+  echo Install Node.js 18+ from https://nodejs.org/
   pause
   exit /b 1
 )
@@ -37,49 +36,40 @@ node --version
 echo.
 
 if not exist "frontend\dist\index.html" (
-  echo [ОШИБКА] Не найден frontend\dist\index.html
-  echo Скачайте lite-архив с GitHub Releases.
+  echo [ERROR] frontend\dist\index.html not found.
   pause
   exit /b 1
 )
 
-echo [1/2] Установка серверных зависимостей (~30-60 МБ)...
+echo [1/2] Installing server dependencies...
 call npm install --omit=dev --prefix backend
 if errorlevel 1 goto :error
 
-echo Пересборка нативных модулей...
+echo Rebuilding native modules...
 call npm rebuild --prefix backend 2>nul
 
 echo.
-echo [2/2] Создание ярлыка...
+echo [2/2] Creating desktop shortcut...
 set "START_SCRIPT=%APP_DIR%installer\windows\start-narada.bat"
 set "SHORTCUT=%USERPROFILE%\Desktop\Narada To-Do.lnk"
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$ws = New-Object -ComObject WScript.Shell; ^
-   $s = $ws.CreateShortcut('%SHORTCUT%'); ^
-   $s.TargetPath = '%START_SCRIPT%'; ^
-   $s.WorkingDirectory = '%APP_DIR%'; ^
-   $s.IconLocation = 'shell32.dll,13'; ^
-   $s.Description = 'Narada To-Do с заметками'; ^
-   $s.Save()"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%SHORTCUT%'); $s.TargetPath = '%START_SCRIPT%'; $s.WorkingDirectory = '%APP_DIR%'; $s.IconLocation = 'shell32.dll,13'; $s.Description = 'Narada To-Do'; $s.Save()"
 
 echo.
 echo ========================================
-echo   Установка завершена!
+echo   Install complete!
 echo ========================================
 echo.
-echo Запуск: ярлык «Narada To-Do» на рабочем столе
-echo        или installer\windows\start-narada.bat
+echo Run: Desktop shortcut "Narada To-Do"
+echo  or: installer\windows\start-narada.bat
 echo.
-echo Данные сохраняются в: %APPDATA%\Narada-Todo\
-echo Диагностика: installer\windows\diagnose.bat
+echo Data folder: %APPDATA%\Narada-Todo\
 echo.
 pause
 exit /b 0
 
 :error
 echo.
-echo [ОШИБКА] Установка прервана.
+echo [ERROR] Install failed.
 pause
-exit /b 1
+exit /b 1
