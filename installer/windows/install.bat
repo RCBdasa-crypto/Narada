@@ -10,11 +10,14 @@ echo   Narada To-Do — установка
 echo ========================================
 echo.
 
-set "APP_DIR=%~dp0"
-if exist "%APP_DIR%..\..\package.json" (
-  set "APP_DIR=%APP_DIR%..\.."
-) else if exist "%APP_DIR%..\package.json" (
-  set "APP_DIR=%APP_DIR%.."
+set "SCRIPT_DIR=%~dp0"
+
+if exist "%SCRIPT_DIR%..\..\backend\package.json" (
+  set "APP_DIR=%SCRIPT_DIR%..\.."
+) else if exist "%SCRIPT_DIR%..\backend\package.json" (
+  set "APP_DIR=%SCRIPT_DIR%.."
+) else (
+  set "APP_DIR=%SCRIPT_DIR%"
 )
 
 cd /d "%APP_DIR%"
@@ -29,18 +32,18 @@ if errorlevel 1 (
   exit /b 1
 )
 
-echo Node.js: 
+echo Node.js:
 node --version
 echo.
 
 if not exist "frontend\dist\index.html" (
-  echo [ОШИБКА] Не найден собранный интерфейс: frontend\dist\
-  echo Скачайте полный архив с GitHub Releases.
+  echo [ОШИБКА] Не найден frontend\dist\index.html
+  echo Скачайте lite-архив с GitHub Releases.
   pause
   exit /b 1
 )
 
-echo [1/2] Установка серверных зависимостей (только runtime, ~30-60 МБ)...
+echo [1/2] Установка серверных зависимостей (~30-60 МБ)...
 call npm install --omit=dev --prefix backend
 if errorlevel 1 goto :error
 
@@ -63,8 +66,10 @@ echo ========================================
 echo   Установка завершена!
 echo ========================================
 echo.
-echo Размер приложения: ~60-80 МБ (без лишних dev-файлов)
 echo Запуск: ярлык «Narada To-Do» на рабочем столе
+echo        или installer\windows\start-narada.bat
+echo.
+echo ВАЖНО: не закрывайте чёрное окно — это сервер!
 echo Браузер: http://localhost:3001
 echo.
 pause
