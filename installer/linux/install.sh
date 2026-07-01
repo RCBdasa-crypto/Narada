@@ -11,7 +11,13 @@ echo "Папка: $APP_DIR"
 echo
 
 if ! command -v node >/dev/null 2>&1; then
-  echo "[ОШИБКА] Node.js не найден. Установите Node.js 18+"
+  echo "[ОШИБКА] Node.js не найден. Установите Node.js 22.5+"
+  exit 1
+fi
+
+NODE_OK=$(node -e "const p=process.versions.node.split('.').map(Number);process.exit(p[0]<22||(p[0]===22&&p[1]<5)?1:0)" && echo yes || echo no)
+if [ "$NODE_OK" != "yes" ]; then
+  echo "[ОШИБКА] Нужен Node.js 22.5+ (встроенный SQLite). Текущая версия: $(node --version)"
   exit 1
 fi
 

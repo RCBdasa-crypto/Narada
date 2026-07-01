@@ -26,7 +26,13 @@ echo.
 where node >nul 2>&1
 if errorlevel 1 (
   echo [ERROR] Node.js not found.
-  echo Install Node.js 18+ from https://nodejs.org/
+  echo Install Node.js 22.5+ from https://nodejs.org/
+  pause
+  exit /b 1
+)
+
+node -e "const p=process.versions.node.split('.').map(Number);if(p[0]<22||(p[0]===22&&p[1]<5)){console.error('[ERROR] Node.js 22.5+ required (built-in SQLite). Current: '+process.version);process.exit(1)}"
+if errorlevel 1 (
   pause
   exit /b 1
 )
@@ -44,9 +50,6 @@ if not exist "frontend\dist\index.html" (
 echo [1/2] Installing server dependencies...
 call npm install --omit=dev --prefix backend
 if errorlevel 1 goto :error
-
-echo Rebuilding native modules...
-call npm rebuild --prefix backend 2>nul
 
 echo.
 echo [2/2] Creating desktop shortcut...

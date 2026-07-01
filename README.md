@@ -18,7 +18,7 @@
 
 - **Frontend:** React + Vite
 - **Backend:** Node.js + Express
-- **База данных:** SQLite (better-sqlite3)
+- **База данных:** SQLite (встроенный модуль Node.js `node:sqlite`)
 - **Тесты:** Jest (backend), Vitest (frontend), Playwright (E2E)
 
 ## Локальный запуск
@@ -49,7 +49,7 @@ Backend API: http://localhost:3001/api/todos
 
 **Linux:** `./installer/linux/install.sh` → команда `narada-todo`.
 
-При установке скачается ~60 МБ серверных зависимостей (нужен Node.js 18+).
+При установке скачается ~60 МБ серверных зависимостей (нужен **Node.js 22.5+** — без Python и компилятора C++).
 
 ### Вариант 2 — setup.exe (~1–3 МБ)
 

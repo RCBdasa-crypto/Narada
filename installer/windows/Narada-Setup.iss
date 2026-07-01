@@ -67,7 +67,7 @@ begin
   if not RegKeyExists(HKLM, 'SOFTWARE\Node.js') and
      not RegKeyExists(HKCU, 'SOFTWARE\Node.js') then
   begin
-    MsgBox('Node.js не обнаружен. Для работы нужен Node.js 18+.' + #13#10 +
+    MsgBox('Node.js не обнаружен. Для работы нужен Node.js 22.5+.' + #13#10 +
            'Скачайте с nodejs.org и установите перед запуском приложения.',
            mbInformation, MB_OK);
   end;
