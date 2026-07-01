@@ -43,6 +43,8 @@ Backend API: http://localhost:3001/api/todos
 
 **Скачать:** https://github.com/RCBdasa-crypto/Narada/releases/download/v1.0.0/Narada-Todo-1.0.0-lite.zip
 
+В архиве есть `installer\windows\Narada-Setup.iss` для Inno Setup.
+
 **Windows:** распакуйте → `installer\windows\install.bat` → ярлык на рабочем столе.
 
 **Linux:** `./installer/linux/install.sh` → команда `narada-todo`.
@@ -51,10 +53,10 @@ Backend API: http://localhost:3001/api/todos
 
 ### Вариант 2 — setup.exe (~1–3 МБ)
 
-1. Скачайте lite-архив и распакуйте (или клонируйте репозиторий)
-2. Выполните `npm run build --prefix frontend` (если нет `frontend/dist`)
-3. Откройте `installer/windows/Narada-Setup.iss` в [Inno Setup](https://jrsoftware.org/isinfo.php)
-4. **Compile** → `release/Narada-Todo-Setup-1.0.0.exe` (~1–3 МБ, не гигабайты!)
+1. Скачайте **lite**-архив и распакуйте
+2. Установите [Inno Setup](https://jrsoftware.org/isinfo.php)
+3. Откройте **`installer\windows\Narada-Setup.iss`** (файл уже в архиве)
+4. **Build → Compile** → `release\Narada-Todo-Setup-1.0.0.exe`
 
 > **Важно:** не компилируйте setup.exe из папки, где уже есть `node_modules` — используйте обновлённый `.iss` с явным списком файлов.
 
