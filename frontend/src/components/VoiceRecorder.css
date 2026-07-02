@@ -1,0 +1,16 @@
+.voice-recorder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.voice-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.voice-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 0.85rem;
+}

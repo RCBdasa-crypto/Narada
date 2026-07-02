@@ -1,0 +1,27 @@
+.emoji-picker-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.emoji-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.emoji-btn {
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.emoji-btn:hover {
+  background: #e5e7eb;
+}

@@ -1,0 +1,77 @@
+.subtask-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subtask-list.compact .subtask-title {
+  font-size: 0.82rem;
+}
+
+.subtask-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtask-check {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  border: 2px solid #9ca3af;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #fff;
+}
+
+.subtask-check.checked {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.subtask-title {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.subtask-list li.completed .subtask-title {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.subtask-delete {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.subtask-delete:hover {
+  color: #dc2626;
+}
+
+.subtask-add-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.subtask-add-row input {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}

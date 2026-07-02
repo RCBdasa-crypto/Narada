@@ -8,8 +8,8 @@
 }
 
 .todo-item {
-  display: flex;
-  gap: 8px;
+  position: relative;
+  display: block;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   overflow: hidden;
@@ -21,12 +21,50 @@
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
+.todo-item-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.icon-btn-flag {
+  color: #16a34a;
+}
+
+.icon-btn-flag:hover {
+  background: #dcfce7;
+}
+
+.icon-btn-trash {
+  color: #dc2626;
+}
+
+.icon-btn-trash:hover {
+  background: #fee2e2;
+}
+
 .todo-item-main {
-  flex: 1;
+  width: 100%;
   border: none;
   background: transparent;
   text-align: left;
-  padding: 12px;
+  padding: 12px 88px 12px 12px;
   cursor: pointer;
 }
 
@@ -39,13 +77,6 @@
   margin: 0;
   color: #6b7280;
   font-size: 0.9rem;
-}
-
-.todo-delete {
-  align-self: center;
-  margin-right: 8px;
-  padding: 8px 12px;
-  font-size: 0.85rem;
 }
 
 .attachment-previews {
@@ -88,4 +119,12 @@
 
 .file-badge:hover {
   background: #d1d5db;
+}
+
+.todo-drawing-preview {
+  max-width: 120px;
+  max-height: 60px;
+  border-radius: 6px;
+  margin-top: 8px;
+  border: 1px solid #d1d5db;
 }

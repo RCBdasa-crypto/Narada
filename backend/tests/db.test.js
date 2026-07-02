@@ -75,9 +75,30 @@ describe('database operations', () => {
     expect(updated.title).toBe('Updated');
     expect(updated.note).toBe('New note');
 
-    const deleted = dbModule.deleteTodo('todo-2');
+    const deleted = dbModule.deleteTodoPermanently('todo-2');
     expect(deleted.id).toBe('todo-2');
-    expect(dbModule.getAllTodos()).toHaveLength(0);
+    expect(dbModule.getAllTodos({ status: 'active' })).toHaveLength(0);
+  });
+
+  it('manages subtasks', () => {
+    const now = new Date().toISOString();
+    dbModule.createTodo({
+      id: 'todo-sub',
+      title: 'Parent',
+      note: '',
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    dbModule.createSubtask({
+      id: 'sub-1',
+      todoId: 'todo-sub',
+      title: 'Sub item',
+      createdAt: now,
+    });
+
+    const toggled = dbModule.toggleSubtask('sub-1');
+    expect(toggled.completed).toBe(true);
   });
 
   it('manages attachments', () => {

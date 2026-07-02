@@ -3,6 +3,9 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import todosRouter from './routes/todos.js';
+import foldersRouter from './routes/folders.js';
+import settingsRouter from './routes/settings.js';
+import remindersRouter from './routes/reminders.js';
 import { uploadsDir } from './db.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -16,6 +19,9 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(uploadsDir));
 app.use('/api/todos', todosRouter);
+app.use('/api/folders', foldersRouter);
+app.use('/api/settings', settingsRouter);
+app.use('/api/reminders', remindersRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(frontendDist));

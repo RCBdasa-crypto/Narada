@@ -14,9 +14,11 @@ test.beforeAll(() => {
 });
 
 test.beforeEach(async ({ request }) => {
-  const todos = await request.get(API_URL).then((res) => res.json());
-  for (const todo of todos) {
-    await request.delete(`${API_URL}/${todo.id}`);
+  for (const status of ['active', 'completed', 'deleted']) {
+    const todos = await request.get(`${API_URL}?status=${status}`).then((res) => res.json());
+    for (const todo of todos) {
+      await request.delete(`${API_URL}/${todo.id}/permanent`);
+    }
   }
 });
 
@@ -57,7 +59,7 @@ test.describe('Narada To-Do App', () => {
     await page.getByTestId('save-button').click();
     await expect(page.getByRole('heading', { name: 'Task to delete' })).toBeVisible();
 
-    await page.getByRole('button', { name: /Удалить Task to delete/ }).click();
+    await page.getByRole('button', { name: /В корзину: Task to delete/ }).click();
     await expect(page.getByRole('heading', { name: 'Task to delete' })).not.toBeVisible();
   });
 

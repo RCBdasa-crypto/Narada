@@ -1,0 +1,103 @@
+.folder-sidebar {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.sidebar-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.folder-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.folder-nav > button,
+.folder-row > button:not(.folder-delete-btn) {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.folder-nav > button:hover,
+.folder-row > button:not(.folder-delete-btn):hover {
+  background: #f3f4f6;
+}
+
+.folder-nav > button.active,
+.folder-row > button.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.folder-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 8px 0;
+}
+
+.folder-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.folder-row > button:not(.folder-delete-btn) {
+  flex: 1;
+}
+
+.folder-delete-btn {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  line-height: 1;
+}
+
+.folder-delete-btn:hover {
+  color: #dc2626;
+}
+
+.folder-edit-input {
+  flex: 1;
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+}
+
+.folder-create {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.folder-create input {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
+.btn-secondary.small {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}

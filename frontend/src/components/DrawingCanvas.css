@@ -1,0 +1,61 @@
+.drawing-canvas-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drawing-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.drawing-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.drawing-toolbar button {
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.drawing-toolbar button.active {
+  background: #dbeafe;
+  border-color: #3b82f6;
+}
+
+.color-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  padding: 0;
+}
+
+.color-swatch.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #93c5fd;
+}
+
+.drawing-canvas {
+  width: 100%;
+  max-width: 480px;
+  height: 200px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  touch-action: none;
+  cursor: crosshair;
+  background: #fff;
+}

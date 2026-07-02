@@ -36,7 +36,7 @@ describe('todos API', () => {
 
     const id = createRes.body.id;
 
-    const listRes = await request(app).get('/api/todos').expect(200);
+    const listRes = await request(app).get('/api/todos?status=active').expect(200);
     expect(listRes.body).toHaveLength(1);
 
     await request(app)
@@ -47,8 +47,35 @@ describe('todos API', () => {
     const getRes = await request(app).get(`/api/todos/${id}`).expect(200);
     expect(getRes.body.title).toBe('Buy oat milk');
 
-    await request(app).delete(`/api/todos/${id}`).expect(204);
-    await request(app).get('/api/todos').expect(200).expect([]);
+    await request(app).patch(`/api/todos/${id}/status`).send({ status: 'deleted' }).expect(200);
+    await request(app).get('/api/todos?status=active').expect(200).expect([]);
+    await request(app).delete(`/api/todos/${id}/permanent`).expect(204);
+  });
+
+  it('manages subtasks and completion status', async () => {
+    const createRes = await request(app)
+      .post('/api/todos')
+      .send({ title: 'Parent', note: '' })
+      .expect(201);
+
+    const id = createRes.body.id;
+
+    const subRes = await request(app)
+      .post(`/api/todos/${id}/subtasks`)
+      .send({ title: 'Child task' })
+      .expect(201);
+
+    expect(subRes.body.title).toBe('Child task');
+
+    await request(app).patch(`/api/todos/${id}/subtasks/${subRes.body.id}/toggle`).expect(200);
+
+    const todoRes = await request(app).get(`/api/todos/${id}`).expect(200);
+    expect(todoRes.body.subtasks[0].completed).toBe(true);
+
+    await request(app).patch(`/api/todos/${id}/status`).send({ status: 'completed' }).expect(200);
+
+    const completed = await request(app).get('/api/todos?status=completed').expect(200);
+    expect(completed.body).toHaveLength(1);
   });
 
   it('rejects todo without title', async () => {
